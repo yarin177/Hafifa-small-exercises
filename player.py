@@ -10,7 +10,6 @@ class MusicPlayer(tk.Frame):
     def __init__(self,master):
         super(MusicPlayer, self).__init__(master)
         self.grid()
-        #init variables
         self.song_list = list()
         self.pausing = False
         self.current_song_index = 0
@@ -40,7 +39,6 @@ class MusicPlayer(tk.Frame):
         add_button.grid(row=1,column=0)
 
     def _songs_list_empty(self):
-
         if not self.song_list:
             self.status['text'] = "There are no songs in the list!"
             return True
@@ -55,32 +53,27 @@ class MusicPlayer(tk.Frame):
             return item
 
     def _add_song_to_queue(self):
-        directory = askopenfilenames()
+        directory = askopenfilenames(title='select', filetypes=[("Music File", "*.mp3")])
 
         for song_dir in directory:
-            print(song_dir)
             self.song_list.append(song_dir)
         self.playlist.delete(0.0, tk.END)
 
         for key, item in enumerate(self.song_list):
             song_data = str(key + 1) + '. ' + self._get_song_data(item)
             self.playlist.insert(tk.END, song_data + '\n')
-    #################################################################################
-    def _play_song(self):
 
+    def _play_song(self):
         if self._songs_list_empty():
             return
         directory = self.song_list[self.current_song_index]
-
         pygame.mixer.music.load(directory)
         pygame.mixer.music.play(SONG_NUM_PLAYS, SONG_START_TIME)
         pygame.mixer.music.set_endevent(pygame.USEREVENT + 1)
         self.pausing = False
-        self.status['text'] = "Now playing song number: " + str(self.current_song_index + 1) + " " + self._get_song_data(self.song_list[self.current_song_index])
-    #################################################################################
-    #################################################################################
-    def _pause_song(self):
+        self.status['text'] = "Now playing song number " + str(self.current_song_index + 1) + ": " + self._get_song_data(self.song_list[self.current_song_index])
 
+    def _pause_song(self):
         if self._songs_list_empty():
             return
 
@@ -90,38 +83,32 @@ class MusicPlayer(tk.Frame):
         elif not self.pausing:
             pygame.mixer.music.pause()
             self.pausing = True
-    #################################################################################
-    def _get_next_song(self):
 
+    def _get_next_song(self):
         if self.current_song_index + 2 <= len(self.song_list):
             return self.current_song_index + 1
         else:
             return 0
-    #################################################################################
-    def _play_next_song(self):
 
+    def _play_next_song(self):
         if self._songs_list_empty():
             return
-
         self.current_song_index = self._get_next_song()
         self._play_song()
-    #################################################################################
-    def _get_previous_song(self):
 
+    def _get_previous_song(self):
         if self.current_song_index - 1 >= 0:
             return self.current_song_index - 1
         else:
             return len(self.song_list) - 1
-    #################################################################################
-    def _play_previous_song(self):
 
+    def _play_previous_song(self):
         if self._songs_list_empty():
             return
         self.current_song_index = self._get_previous_song()
         self._play_song()
 
 def start_music_player(window,app):
-
     while window.children:
         for event in pygame.event.get():
             if event.type == pygame.mixer.music.get_endevent():
@@ -136,7 +123,6 @@ def main():
     window.grid_columnconfigure(0, weight=1)
     window.title("MP3 Music Player")
     app = MusicPlayer(window)
-
     start_music_player(window,app)
 
 if __name__ == "__main__":
