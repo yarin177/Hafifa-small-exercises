@@ -78,11 +78,6 @@ class MusicPlayer(tk.Frame):
         self.pausing = False
         self.status['text'] = "Now playing song number: " + str(self.current_song_index + 1) + " " + self._get_song_data(self.song_list[self.current_song_index])
     #################################################################################
-    def _check_song_ended(self):
-
-        for event in pygame.event.get():
-            if event.type == pygame.mixer.music.get_endevent():
-                self._play_next_song()
     #################################################################################
     def _pause_song(self):
 
@@ -125,9 +120,14 @@ class MusicPlayer(tk.Frame):
         self.current_song_index = self._get_previous_song()
         self._play_song()
 
+def start_music_player(window,app):
 
-def close_app():
-    return True
+    while window.children:
+        for event in pygame.event.get():
+            if event.type == pygame.mixer.music.get_endevent():
+                app._play_next_song()
+
+        window.update()
 
 def main():
     pygame.init()
@@ -137,11 +137,7 @@ def main():
     window.title("MP3 Music Player")
     app = MusicPlayer(window)
 
-    #tk.mainloop()
-
-    while True:
-        app._check_song_ended()
-        app.update()
+    start_music_player(window,app)
 
 if __name__ == "__main__":
     main()
