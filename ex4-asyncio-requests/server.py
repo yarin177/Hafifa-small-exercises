@@ -1,6 +1,6 @@
-from flask import Flask,request
+from flask import Flask
 import argparse
-import random
+from random import randint
 
 app = Flask(__name__)
 
@@ -15,12 +15,11 @@ def get_port_from_parser():
 
 @app.route('/<str>', methods = ['GET'])
 def get_random_string(str):
-    rand_num = random.randint(1,5)
+    rand_num = randint(1,5)
     if rand_num == 1:
         return str
     else:
-        random_strings = ['Apple','SpaceX','Samsung','Tesla','Microsoft','Windows']
-        return random.choice(random_strings)
+        return ''
 
 if __name__ == '__main__':
     port = get_port_from_parser() # default is 8080
