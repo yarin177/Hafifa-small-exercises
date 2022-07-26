@@ -42,7 +42,7 @@ def write_output(results):
 def main():
     words = get_lines_from_file()
     start = timeit.default_timer()
-    results = request_servers(words[0:1000])
+    results = request_servers(words)
     write_output(results)
     stop = timeit.default_timer()
     print('Time: ', stop - start) 

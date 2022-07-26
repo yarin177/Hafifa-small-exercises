@@ -15,7 +15,7 @@ def get_port_from_parser():
 
 @app.route('/<str>', methods = ['GET'])
 def get_random_string(str):
-    rand_num = randint(1,5)
+    rand_num = randint(1,3)
     if rand_num == 1:
         return str
     else:
