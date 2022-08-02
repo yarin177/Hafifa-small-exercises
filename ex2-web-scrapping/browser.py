@@ -9,7 +9,8 @@ INPUT_FILE = os.path.join(INPUT_FOLDER, 'urls.input')
 OUTPUT_FOLDER = 'output'
 
 def get_external_links(browser: webdriver.Chrome) -> list:
-    """Returns a list of URLs containing all the external links and images in a page'
+    """
+    Returns a list of URLs containing all the external links and images in a page'
 
     Args:
       browser (webdriver.Chrome): Current used browser
@@ -23,17 +24,13 @@ def get_external_links(browser: webdriver.Chrome) -> list:
     return imageLinks.extend(website_urls)
 
 def init_output_folder():
-
     if os.path.isdir(OUTPUT_FOLDER):
         rmtree(OUTPUT_FOLDER)
     os.mkdir(OUTPUT_FOLDER)
 
-
 def read_urls_from_file() -> list:
-    """Reads a local INPUT_FILE file, arranges the URLs with their indexes in a list of tuples
-
-    Args:
-      None
+    """
+    Reads a local INPUT_FILE file, arranges the URLs with their indexes in a list of tuples
 
     Returns:
       list: list of tuples contaning URL,index
@@ -46,13 +43,11 @@ def read_urls_from_file() -> list:
     return list(zip(urls, urls_index))
 
 def scrape_page(url: list):
-    """Scrapes a page and saves its info in a unique folder inside the 'output' dir
+    """
+    Scrapes a page and saves its info in a unique folder inside the 'output' dir
 
     Args:
       list: (url) that contains the URL of the page and its index
-
-    Returns:
-      None
     """
     #save local path to url folder
     url_path = os.path.join(OUTPUT_FOLDER, f"url_{url[1]+1}")
