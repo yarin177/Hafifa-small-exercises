@@ -6,7 +6,7 @@ FILE_PATH = 'lines.txt'
 SERVER_URL_8080 = 'http://localhost:8080'
 SERVER_URL_8081 = 'http://localhost:8081'
 
-async def fetch(word: str,session: aiohttp.ClientSession(),session2: aiohttp.ClientSession()) -> bool:
+async def compare_strings(word: str,session: aiohttp.ClientSession(),session2: aiohttp.ClientSession()) -> bool:
     """This function sends a word(string) to both servers via HTTP GET requests,
         compares the results and returns True/False accordingly.
     Args:
@@ -36,7 +36,7 @@ async def gather_coroutines(words: list) -> asyncio.Future:
     """
     async with aiohttp.ClientSession() as session, aiohttp.ClientSession() as session2:
         return await asyncio.gather(*[
-            fetch(word,session,session2) for word in words
+            compare_strings(word,session,session2) for word in words
         ])
 
 def request_servers(words: list) -> list:
@@ -56,10 +56,12 @@ def request_servers(words: list) -> list:
 
 def main():
     start = timeit.default_timer()
+    
     # read all words from local file
     with open(FILE_PATH, 'r', encoding='utf-8') as f:
         words = f.read().split('\n')
     results = request_servers(words[0:10000])
+    
     # write results to local file
     with open('output.txt', 'w', encoding='utf-8') as fp:
         fp.write("\n".join(str(result) for result in results))
