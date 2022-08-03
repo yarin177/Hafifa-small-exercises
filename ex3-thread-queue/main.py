@@ -2,15 +2,15 @@ import threading
 from queue import Queue
 import time
 
-'''
-ThreadQueue class limits the amount of running threads and the lifespan of each one
-by keeping track of how many 'jobs' each thread executed, after X jobs, the thread
-dies and the main thread will create a new thread to continue executing the jobs.
-'''
 class ThreadQueue:
-    def __init__(self,MAX_RUNNING_THREADS,THREAD_JOB_LIMIT):
-        self.MAX_RUNNING_THREADS = MAX_RUNNING_THREADS
-        self.THREAD_JOB_LIMIT = THREAD_JOB_LIMIT
+    '''
+    ThreadQueue class limits the amount of running threads and the lifespan of each one
+    by keeping track of how many 'jobs' each thread executed, after X jobs, the thread
+    dies and the main thread will create a new thread to continue executing the jobs.
+    '''
+    def __init__(self,max_running_threads,thread_job_limit):
+        self.MAX_RUNNING_THREADS = max_running_threads
+        self.THREAD_JOB_LIMIT = thread_job_limit
 
         self.queue = Queue()
         self.active_threads = []
@@ -29,23 +29,18 @@ class ThreadQueue:
             counter += 1
 
     def create_jobs(self,numbers_of_jobs):
-
         for job in range(0,numbers_of_jobs):
             self.queue.put(job)
 
     def _start_threads(self):
-
         for thread in self.active_threads:
             thread.start()
 
     def run_threads(self):
-        """This function is responsible for new threads creation when a thread
+        """
+        This function is responsible for new threads creation when a thread
             finished his lifespan, this is done by constantly checking 
             the jobs queue and the lifespan of each thread.
-        Args:
-            None
-        Returns:
-            None
         """
         #create 5 initial threads
         self.active_threads = [threading.Thread(target=self._threadHandler) for _ in range(self.MAX_RUNNING_THREADS)]
